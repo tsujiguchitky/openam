@@ -21,6 +21,8 @@
 * with the fields enclosed by brackets [] replaced by
 * your own identifying information:
 * "Portions Copyrighted [year] [name of copyright owner]"
+* 
+* Portions Copyrighted 2019 Open Source Solution Technology Corporation
 *
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -128,7 +130,7 @@
         <ant.contrib.version>1.0b3</ant.contrib.version>
         <guice.version>3.0</guice.version>
         <restlet.version>2.3.4</restlet.version>
-        <powermock.version>1.5</powermock.version>
+        <powermock.version>2.0.0</powermock.version>
         <jackson.version>2.9.7</jackson.version>
         <slf4j.version>1.7.5</slf4j.version>
         <santuario.xmlsec.version>1.5.6</santuario.xmlsec.version>
@@ -1787,6 +1789,12 @@
                 <groupId>org.forgerock.commons</groupId>
                 <artifactId>forgerock-guice-core</artifactId>
                 <version>${forgerock.guice.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mockito</groupId>
+                        <artifactId>mockito-all</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
@@ -1798,6 +1806,12 @@
                 <artifactId>forgerock-guice-test</artifactId>
                 <version>${forgerock.guice.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mockito</groupId>
+                        <artifactId>mockito-all</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -1838,7 +1852,13 @@
             <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
-                <version>6.8.5</version>
+                <version>6.14.3</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -1849,14 +1869,14 @@
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>1.9.5</version>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
-                <version>3.2</version>
+                <version>4.0.2</version>
                 <scope>test</scope>
             </dependency>
             <!-- Powermock -->
@@ -1898,7 +1918,7 @@
             </dependency>
             <dependency>
                 <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
+                <artifactId>powermock-api-mockito2</artifactId>
                 <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -1965,7 +1985,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>

@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2014 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.cts.reaper;
 
@@ -20,6 +21,7 @@ import org.forgerock.openam.cts.exceptions.CoreTokenException;
 import org.forgerock.openam.cts.impl.query.reaper.ReaperQuery;
 import org.forgerock.openam.cts.impl.query.reaper.ReaperQueryFactory;
 import org.forgerock.openam.cts.monitoring.CTSReaperMonitoringStore;
+import org.mockito.Mockito;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,12 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.verify;
-import static org.mockito.Matchers.anyCollection;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.BDDMockito.*;
 
 public class CTSReaperTest {
     private CTSReaper reaper;
@@ -72,7 +69,7 @@ public class CTSReaperTest {
         // Given
         Collection<String> tokens = Arrays.asList("badger", "weasel", "ferret");
         given(mockQuery.nextPage()).willReturn(tokens).willReturn(null);
-        given(mockTokenDeletion.deleteBatch(anyCollection())).willReturn(new CountDownLatch(0));
+        given(mockTokenDeletion.deleteBatch(Mockito.<String>anyCollection())).willReturn(new CountDownLatch(0));
 
         // When
         reaper.run();
@@ -91,7 +88,7 @@ public class CTSReaperTest {
         Collection<String> tokens = Arrays.asList("badger", "weasel", "ferret");
         given(mockQuery.nextPage()).willReturn(tokens).willReturn(tokens).willReturn(tokens).willReturn(null);
 
-        given(mockTokenDeletion.deleteBatch(anyCollection())).willReturn(one).willReturn(two).willReturn(three);
+        given(mockTokenDeletion.deleteBatch(Mockito.<String>anyCollection())).willReturn(one).willReturn(two).willReturn(three);
 
         // When
         reaper.run();

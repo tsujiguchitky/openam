@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.sm.datalayer.impl.ldap;
 
@@ -60,13 +61,13 @@ public class ExternalLdapConfigTest extends PowerMockTestCase {
         // When
         config.update(dataLayerConfiguration);
         // Then
-        PowerMockito.verifyStatic(times(3));
+        PowerMockito.verifyStatic(SystemProperties.class, times(3));
         SystemProperties.get(anyString());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(SystemProperties.class);
         SystemProperties.getAsBoolean(anyString(), anyBoolean());
 
-        PowerMockito.verifyStatic();
+        PowerMockito.verifyStatic(SystemProperties.class);
         SystemProperties.getAsInt(anyString(), eq(-1));
     }
 

@@ -12,12 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.core.rest.authn;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.testng.Assert.*;
 
 import com.iplanet.dpro.session.SessionID;
@@ -54,6 +54,7 @@ import org.forgerock.openam.core.rest.authn.exceptions.RestAuthException;
 import org.forgerock.openam.utils.AMKeyProvider;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -86,7 +87,7 @@ public class AuthIdHelperTest {
 
         given(jwtBuilderFactory.claims()).willReturn(claimsSetBuilder);
         given(claimsSetBuilder.claim(anyString(), anyObject())).willReturn(claimsSetBuilder);
-        given(claimsSetBuilder.claims(anyMap())).willReturn(claimsSetBuilder);
+        given(claimsSetBuilder.claims(Mockito.<String, Object>anyMap())).willReturn(claimsSetBuilder);
         given(claimsSetBuilder.build()).willReturn(claimsSet);
 
 

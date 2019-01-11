@@ -12,10 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013 ForgeRock Inc.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package com.sun.identity.authentication.jaas;
 
 import com.sun.identity.authentication.spi.InvalidPasswordException;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -28,13 +30,7 @@ import javax.security.auth.spi.LoginModule;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Exercises the login context.
@@ -363,7 +359,7 @@ public class LoginContextTest {
     private void verifyInitialize(LoginModule... modules) {
         for (LoginModule module : modules) {
             // Options use eq() as opposed to same() because the map is wrapped by the authn framework.
-            verify(module).initialize(same(subject), same(handler), anyMap(), eq(optionCache.get(module)));
+            verify(module).initialize(same(subject), same(handler), Mockito.<String, Object>anyMap(), eq(optionCache.get(module)));
         }
     }
 

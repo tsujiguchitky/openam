@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.rest.query;
 
@@ -22,6 +23,7 @@ import static org.mockito.Mockito.*;
 import org.forgerock.json.JsonPointer;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -53,7 +55,7 @@ public class QueryByStringFilterConverterTest {
                 and(equalTo(new JsonPointer("param1"), "value1"), contains(new JsonPointer("param2"), "value2"));
         QueryByStringFilterConverter mockConverter = mock(QueryByStringFilterConverter.class);
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-        when(mockConverter.visitAndFilter(any(Void.class), anyList())).thenCallRealMethod();
+        when(mockConverter.visitAndFilter(any(Void.class), Mockito.<QueryFilter<JsonPointer>>anyList())).thenCallRealMethod();
 
         // when
         filter.accept(mockConverter, null);
@@ -73,7 +75,7 @@ public class QueryByStringFilterConverterTest {
                 or(equalTo(new JsonPointer("param1"), "value1"), contains(new JsonPointer("param2"), "value2"));
         QueryByStringFilterConverter mockConverter = mock(QueryByStringFilterConverter.class);
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-        when(mockConverter.visitOrFilter(any(Void.class), anyList())).thenCallRealMethod();
+        when(mockConverter.visitOrFilter(any(Void.class), Mockito.<QueryFilter<JsonPointer>>anyList())).thenCallRealMethod();
 
         // when
         filter.accept(mockConverter, null);
@@ -95,8 +97,8 @@ public class QueryByStringFilterConverterTest {
         QueryByStringFilterConverter mockConverter = mock(QueryByStringFilterConverter.class);
         ArgumentCaptor<List> andCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List> orCaptor = ArgumentCaptor.forClass(List.class);
-        when(mockConverter.visitAndFilter(any(Void.class), anyList())).thenCallRealMethod();
-        when(mockConverter.visitOrFilter(any(Void.class), anyList())).thenCallRealMethod();
+        when(mockConverter.visitAndFilter(any(Void.class), Mockito.<QueryFilter<JsonPointer>>anyList())).thenCallRealMethod();
+        when(mockConverter.visitOrFilter(any(Void.class), Mockito.<QueryFilter<JsonPointer>>anyList())).thenCallRealMethod();
 
         // when
         filter.accept(mockConverter, null);
