@@ -12,16 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.sm.datalayer.impl.tasks;
 
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.forgerock.openam.cts.api.tokens.Token;
 import org.forgerock.openam.cts.exceptions.CoreTokenException;
@@ -29,6 +24,7 @@ import org.forgerock.openam.cts.impl.LdapAdapter;
 import org.forgerock.openam.sm.datalayer.api.DataLayerException;
 import org.forgerock.openam.sm.datalayer.api.ResultHandler;
 import org.forgerock.opendj.ldap.Connection;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -42,6 +38,7 @@ public class UpdateTaskTest {
     @BeforeMethod
     public void setup() throws Exception {
         mockToken = mock(Token.class);
+        given(mockToken.getTokenId()).willReturn(new String());
         mockAdapter = mock(LdapAdapter.class);
         mockConnection = mock(Connection.class);
         mockHandler = mock(ResultHandler.class);

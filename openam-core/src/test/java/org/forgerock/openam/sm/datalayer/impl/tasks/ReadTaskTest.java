@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.sm.datalayer.impl.tasks;
 
@@ -73,7 +74,7 @@ public class ReadTaskTest {
         try {
             task.execute(mockConnection, mockAdapter);
         } catch (DataLayerException e) {}
-        verify(mockResultHandler).processError(any(CoreTokenException.class));
+        verify(mockResultHandler).processError(any(DataLayerException.class));
     }
 
     private void adapterWillFailOnRead() throws Exception {

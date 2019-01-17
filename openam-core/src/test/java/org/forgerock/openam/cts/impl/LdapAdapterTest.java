@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.cts.impl;
@@ -51,6 +52,7 @@ import org.forgerock.opendj.ldap.responses.Result;
 import org.forgerock.util.query.QueryFilter;
 import org.forgerock.util.query.QueryFilterVisitor;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
@@ -229,7 +231,7 @@ public class LdapAdapterTest {
     public void shouldQuery() throws Exception {
         // Given
         final QueryBuilder<Connection, Filter> mockBuilder = mock(QueryBuilder.class);
-        given(mockBuilder.withFilter(any(Filter.class))).willAnswer(new Answer<QueryBuilder<Connection, Filter>>() {
+        given(mockBuilder.withFilter(Mockito.<Filter>any())).willAnswer(new Answer<QueryBuilder<Connection, Filter>>() {
             @Override
             public QueryBuilder<Connection, Filter> answer(InvocationOnMock invocation) throws Throwable {
                 return mockBuilder;
@@ -247,7 +249,7 @@ public class LdapAdapterTest {
         Collection<Token> result = adapter.query(mockConnection, filter);
 
         // Then
-        verify(mockBuilder).withFilter(any(Filter.class));
+        verify(mockBuilder).withFilter(Mockito.<Filter>any());
         verify(mockBuilder).execute(mockConnection);
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.iterator().next().getTokenId()).isEqualTo("weasel");
@@ -257,7 +259,7 @@ public class LdapAdapterTest {
     public void shouldPartialQuery() throws Exception {
         // Given
         final QueryBuilder<Connection, Filter> mockBuilder = mock(QueryBuilder.class);
-        given(mockBuilder.withFilter(any(Filter.class))).willAnswer(new Answer<QueryBuilder<Connection, Filter>>() {
+        given(mockBuilder.withFilter(Mockito.<Filter>any())).willAnswer(new Answer<QueryBuilder<Connection, Filter>>() {
             @Override
             public QueryBuilder<Connection, Filter> answer(InvocationOnMock invocation) throws Throwable {
                 return mockBuilder;
@@ -286,7 +288,7 @@ public class LdapAdapterTest {
         Collection<PartialToken> result = adapter.partialQuery(mockConnection, filter);
 
         // Then
-        verify(mockBuilder).withFilter(any(Filter.class));
+        verify(mockBuilder).withFilter(Mockito.<Filter>any());
         verify(mockBuilder).returnTheseAttributes(asSet(CoreTokenField.STRING_ONE));
         verify(mockBuilder).executeAttributeQuery(mockConnection);
         assertThat(result).containsOnly(partialToken);

@@ -12,11 +12,10 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package com.sun.identity.authentication.audit;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.forgerock.openam.audit.AuditConstants.EventName;
 
@@ -27,6 +26,7 @@ import org.forgerock.openam.audit.AuditConstants;
 import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -51,8 +51,8 @@ public class AuthenticationProcessEventAuditorTest {
     public void setupMocks() {
         MockitoAnnotations.initMocks(this);
 
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
-        when(eventFactory.authenticationEvent(anyString())).thenCallRealMethod();
+        when(eventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventFactory.authenticationEvent(Mockito.<String>any())).thenCallRealMethod();
         auditor = new AuthenticationProcessEventAuditor(eventPublisher, eventFactory);
     }
 

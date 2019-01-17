@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.cts.impl.queue;
 
@@ -34,12 +35,15 @@ public class DeleteOnQueryResultHandlerTest {
     private DeleteOnQueryResultHandler handler;
     private TaskDispatcher mockTaskDispatcher;
     private ResultHandlerFactory mockResultHandlerFactory;
+    private ResultHandler mockResultHandler;
     private Debug mockDebug;
 
     @BeforeMethod
     public void setup() {
         mockTaskDispatcher = mock(TaskDispatcher.class);
         mockResultHandlerFactory = mock(ResultHandlerFactory.class);
+        mockResultHandler = mock(ResultHandler.class);
+        given(mockResultHandlerFactory.getDeleteHandler()).willReturn(mockResultHandler);
         mockDebug = mock(Debug.class);
         handler = new DeleteOnQueryResultHandler(mockTaskDispatcher, mockResultHandlerFactory, mockDebug);
     }

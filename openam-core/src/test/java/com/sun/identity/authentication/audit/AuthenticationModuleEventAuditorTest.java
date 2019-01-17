@@ -24,6 +24,7 @@ import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.openam.audit.model.AuthenticationAuditEntry;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -53,8 +54,8 @@ public class AuthenticationModuleEventAuditorTest {
     public void setupMocks() {
         MockitoAnnotations.initMocks(this);
 
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
-        when(eventFactory.authenticationEvent(anyString())).thenCallRealMethod();
+        when(eventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventFactory.authenticationEvent(Mockito.<String>any())).thenCallRealMethod();
         auditor = new AuthenticationModuleEventAuditor(eventPublisher, eventFactory);
     }
 

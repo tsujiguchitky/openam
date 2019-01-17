@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2014 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package com.iplanet.dpro.session.operations.strategies;
 
@@ -26,6 +27,7 @@ import com.sun.identity.shared.debug.Debug;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -47,13 +49,14 @@ public class RemoteOperationsTest {
     private SessionResponse mockResponse;
 
     @BeforeMethod
-    public void setup() throws SessionException {
+    public void setup() throws SessionException, MalformedURLException {
         mockRequester = mock(Session.class);
         mockRequesterId = mock(SessionID.class);
         given(mockRequester.getID()).willReturn(mockRequesterId);
         mockSession = mock(Session.class);
         mockSessionId = mock(SessionID.class);
         given(mockSession.getID()).willReturn(mockSessionId);
+        given(mockSession.getSessionServiceURL()).willReturn(new URL("http://www.test.com/"));
 
         mockRequests = mock(Requests.class);
         mockResponse = mock(SessionResponse.class);

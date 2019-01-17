@@ -12,11 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2014 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.cts.utils.blob;
 
 import org.forgerock.openam.cts.CoreTokenConfig;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -24,8 +26,7 @@ import java.util.Arrays;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.fest.assertions.Fail.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 public class TokenBlobStrategyTest {
     private CoreTokenConfig config;
@@ -55,9 +56,9 @@ public class TokenBlobStrategyTest {
         strategy.perform(data);
 
         // Then
-        verify(first).perform(any(byte[].class));
-        verify(second).perform(any(byte[].class));
-        verify(third).perform(any(byte[].class));
+        verify(first).perform(Mockito.<byte[]>any());
+        verify(second).perform(Mockito.<byte[]>any());
+        verify(third).perform(Mockito.<byte[]>any());
     }
 
     @Test
@@ -78,9 +79,9 @@ public class TokenBlobStrategyTest {
         strategy.reverse(data);
 
         // Then
-        verify(first).reverse(any(byte[].class));
-        verify(second).reverse(any(byte[].class));
-        verify(third).reverse(any(byte[].class));
+        verify(first).reverse(Mockito.<byte[]>any());
+        verify(second).reverse(Mockito.<byte[]>any());
+        verify(third).reverse(Mockito.<byte[]>any());
     }
 
     @Test

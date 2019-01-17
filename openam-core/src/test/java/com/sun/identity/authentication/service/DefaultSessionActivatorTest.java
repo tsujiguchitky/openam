@@ -12,15 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package com.sun.identity.authentication.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.*;
 
 import com.iplanet.dpro.session.SessionID;
 import com.iplanet.dpro.session.service.InternalSession;
@@ -28,6 +26,7 @@ import com.iplanet.dpro.session.service.SessionService;
 import com.sun.identity.authentication.util.ISAuthConstants;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -59,7 +58,7 @@ public class DefaultSessionActivatorTest {
         MockitoAnnotations.initMocks(this);
 
         given(mockState.getOrgDN()).willReturn(ORGDN);
-        given(mockSessionService.newInternalSession(eq(ORGDN), any(HttpSession.class), eq(false)))
+        given(mockSessionService.newInternalSession(eq(ORGDN), Mockito.<HttpSession>any(), eq(false)))
                 .willReturn(mockNewSession);
         given(mockNewSession.getID()).willReturn(SID);
     }
@@ -73,7 +72,7 @@ public class DefaultSessionActivatorTest {
         DefaultSessionActivator.INSTANCE.activateSession(mockState, mockSessionService, mockAuthSession, null, null);
 
         // Then
-        verify(mockSessionService).newInternalSession(eq(ORGDN), any(HttpSession.class), anyBoolean());
+        verify(mockSessionService).newInternalSession(eq(ORGDN), Mockito.<HttpSession>any(), anyBoolean());
     }
 
     @Test

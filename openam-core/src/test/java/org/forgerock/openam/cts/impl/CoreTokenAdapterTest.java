@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.cts.impl;
 
@@ -44,6 +45,7 @@ public class CoreTokenAdapterTest {
     private TokenBlobStrategy mockStrategy;
     private TaskDispatcher mockTaskDispatcher;
     private ResultHandlerFactory mockResultHandlerFactory;
+    private ResultHandler mockResultHandler;
     private Debug mockDebug;
     private CTSReaperInit mockReaperInit;
 
@@ -52,6 +54,11 @@ public class CoreTokenAdapterTest {
         mockStrategy = mock(TokenBlobStrategy.class);
         mockTaskDispatcher = mock(TaskDispatcher.class);
         mockResultHandlerFactory = mock(ResultHandlerFactory.class);
+        mockResultHandler = mock(ResultHandler.class);
+        given(mockResultHandlerFactory.getCreateHandler()).willReturn(mockResultHandler);
+        given(mockResultHandlerFactory.getUpdateHandler()).willReturn(mockResultHandler);
+        given(mockResultHandlerFactory.getDeleteHandler()).willReturn(mockResultHandler);
+        given(mockResultHandlerFactory.getDeleteOnQueryHandler()).willReturn(mockResultHandler);
         mockReaperInit = mock(CTSReaperInit.class);
         mockDebug = mock(Debug.class);
 
