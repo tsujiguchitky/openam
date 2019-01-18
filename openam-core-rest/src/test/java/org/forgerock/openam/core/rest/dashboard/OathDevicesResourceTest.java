@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.core.rest.dashboard;
@@ -23,12 +24,6 @@ import static org.forgerock.json.resource.test.assertj.AssertJQueryResponseAsser
 import static org.forgerock.json.resource.test.assertj.AssertJResourceResponseAssert.assertThat;
 import static org.forgerock.openam.utils.Time.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import com.iplanet.sso.SSOException;
 import com.iplanet.sso.SSOToken;
@@ -64,6 +59,7 @@ import org.forgerock.services.context.Context;
 import org.forgerock.util.promise.Promise;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -240,7 +236,7 @@ public class OathDevicesResourceTest {
 
             AMIdentity mockId = mock(AMIdentity.class);
             try {
-                given(mockId.getAttribute(anyString())).willReturn(attribute); // makes them
+                given(mockId.getAttribute(Mockito.<String>any())).willReturn(attribute); // makes them
             } catch (IdRepoException | SSOException e) {
                 e.printStackTrace();
             }

@@ -12,16 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.core.rest.cts;
 
 import static org.forgerock.json.resource.test.assertj.AssertJResourceResponseAssert.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.*;
 import static org.testng.Assert.fail;
 
 import com.sun.identity.shared.debug.Debug;
@@ -80,6 +76,7 @@ public class CoreTokenResourceTest {
         // Given
         CreateRequest request = mock(CreateRequest.class);
         given(request.getContent()).willReturn(new JsonValue(""));
+        given(mockSerialisation.deserialise(anyString(), Matchers.<Class<Object>>any())).willReturn(mockToken);
         doThrow(IllegalArgumentException.class).when(mockStore).createAsync(any(Token.class));
 
         // When
