@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.maven.plugins.inject.content;
@@ -65,6 +66,9 @@ public class IOFactoryTest {
         BufferedWriter writer = mock(BufferedWriter.class);
         File content = mock(File.class);
         ContentConverter contentConverter = mock(ContentConverter.class);
+        given(contentConverter.convert(anyString()))
+                .willReturn("LINE1")
+                .willReturn("LINE2");
 
         given(reader.readLine())
                 .willReturn("LINE1")
