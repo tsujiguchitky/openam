@@ -12,13 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2013-2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.authentication.modules.persistentcookie;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.testng.Assert.*;
 
 import javax.security.auth.Subject;
@@ -608,6 +607,13 @@ public class PersistentCookieAuthModuleTest {
     public void shouldStoreClientIPOnLoginSuccess() throws AuthenticationException, SSOException {
 
         //Given
+        persistentCookieAuthModule = new PersistentCookieAuthModule(new ServletJwtSessionModule(), amKeyProvider, coreWrapper) {
+            @Override
+            protected String getKeyAlias(String orgName) throws SSOException, SMSException {
+                return "KEY_ALIAS";
+            }
+        };
+
         MessageInfo messageInfo = mock(MessageInfo.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
