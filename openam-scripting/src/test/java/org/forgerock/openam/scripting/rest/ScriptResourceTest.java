@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.scripting.rest;
 
@@ -21,12 +22,6 @@ import static org.forgerock.openam.scripting.ScriptConstants.*;
 import static org.forgerock.openam.scripting.ScriptConstants.ScriptContext.*;
 import static org.forgerock.openam.scripting.SupportedScriptingLanguage.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.*;
 import com.sun.identity.shared.encode.Base64;
 import org.forgerock.services.context.Context;
@@ -116,7 +111,7 @@ public class ScriptResourceTest {
         Logger logger = mock(Logger.class);
         ScriptingService scriptingService = new MockScriptingService();
         ScriptingServiceFactory serviceFactory = mock(ScriptingServiceFactory.class);
-        when(serviceFactory.create(anyString())).thenReturn(scriptingService);
+        when(serviceFactory.create(Mockito.<String>any())).thenReturn(scriptingService);
         ExceptionMappingHandler<ScriptException, ResourceException> errorHandler = new ScriptExceptionMappingHandler();
         scriptResource = new ScriptResource(logger, serviceFactory, errorHandler,
                 new StandardScriptValidator(new StandardScriptEngineManager()));
