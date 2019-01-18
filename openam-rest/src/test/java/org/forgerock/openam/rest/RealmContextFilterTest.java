@@ -12,15 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.IOException;
@@ -58,6 +56,7 @@ import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -89,6 +88,8 @@ public class RealmContextFilterTest {
     private RestRealmValidator realmValidator;
     @Mock
     private Handler handler;
+    @Mock
+    private SSOToken ssoToken;
 
     @SuppressWarnings("unchecked")
     @BeforeMethod
@@ -96,6 +97,7 @@ public class RealmContextFilterTest {
         initMocks(this);
         filter = new RealmContextFilter(coreWrapper, realmValidator);
 
+        given(coreWrapper.getAdminToken()).willReturn(ssoToken);
         given(coreWrapper.getOrganization(any(SSOToken.class), eq(ENDPOINT_PATH_ELEMENT)))
                 .willThrow(IdRepoException.class);
     }
@@ -577,7 +579,7 @@ public class RealmContextFilterTest {
         verify(requestHandler, atLeast(0)).handleDelete(contextCaptor.capture(), (DeleteRequest) requestCaptor.capture());
         verify(requestHandler, atLeast(0)).handlePatch(contextCaptor.capture(), (PatchRequest) requestCaptor.capture());
         verify(requestHandler, atLeast(0)).handleAction(contextCaptor.capture(), (ActionRequest) requestCaptor.capture());
-        verify(requestHandler, atLeast(0)).handleQuery(contextCaptor.capture(), (QueryRequest) requestCaptor.capture(), any(QueryResponseHandler.class));
+        verify(requestHandler, atLeast(0)).handleQuery(contextCaptor.capture(), (QueryRequest) requestCaptor.capture(), Mockito.<QueryResponseHandler>any());
     }
 
     private Handler getHttpHandler(RequestHandler requestHandler) {
@@ -591,7 +593,7 @@ public class RealmContextFilterTest {
         given(requestHandler.handlePatch(any(Context.class), any(PatchRequest.class))).willReturn(result);
         given(requestHandler.handleAction(any(Context.class), any(ActionRequest.class)))
                 .willReturn(Promises.<ActionResponse, ResourceException>newResultPromise(mock(ActionResponse.class)));
-        given(requestHandler.handleQuery(any(Context.class), any(QueryRequest.class), any(QueryResponseHandler.class)))
+        given(requestHandler.handleQuery(any(Context.class), any(QueryRequest.class), Mockito.<QueryResponseHandler>any()))
                 .willReturn(Promises.<QueryResponse, ResourceException>newResultPromise(mock(QueryResponse.class)));
         FilterChain filterChain = new FilterChain(requestHandler, filter);
         return CrestHttp.newHttpHandler(filterChain);

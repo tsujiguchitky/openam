@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.rest.audit;
 
@@ -38,6 +39,7 @@ import org.forgerock.openam.audit.DefaultAuditServiceProxy;
 import org.forgerock.openam.audit.configuration.AMAuditServiceConfiguration;
 import org.forgerock.openam.audit.context.AuditRequestContext;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Restlet;
@@ -80,7 +82,7 @@ public class AbstractRestletAccessAuditFilterTest {
         when(request.getEntity()).thenReturn(representation);
         when(request.getAttributes()).thenReturn(new ConcurrentHashMap<String, Object>());
         when(representation.isTransient()).thenReturn(false);
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(false);
+        when(eventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).thenReturn(false);
 
         // When
         auditFilter.handle(request, response);
@@ -98,14 +100,14 @@ public class AbstractRestletAccessAuditFilterTest {
         request.setDate(newDate());
         Response response = new Response(request);
         request.setEntity(new JsonRepresentation((Map<String, Object>) object(field("fred", "v"), field("gary", 7))));
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).thenReturn(true);
 
         // When
         auditFilter.beforeHandle(request, response);
 
         // Then
         ArgumentCaptor<AuditEvent> captor = ArgumentCaptor.forClass(AuditEvent.class);
-        verify(eventPublisher).tryPublish(anyString(), captor.capture());
+        verify(eventPublisher).tryPublish(Mockito.<String>any(), captor.capture());
         assertThat(captor.getValue().getValue()).isObject()
                 .hasObject("request")
                 .hasObject("detail")
@@ -121,14 +123,14 @@ public class AbstractRestletAccessAuditFilterTest {
         request.setDate(newDate());
         Response response = new Response(request);
         response.setEntity(new JsonRepresentation((Map<String, Object>) object(field("fred", "v"), field("gary", 7))));
-        when(eventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).thenReturn(true);
+        when(eventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).thenReturn(true);
 
         // When
         auditFilter.afterHandle(request, response);
 
         // Then
         ArgumentCaptor<AuditEvent> captor = ArgumentCaptor.forClass(AuditEvent.class);
-        verify(eventPublisher).tryPublish(anyString(), captor.capture());
+        verify(eventPublisher).tryPublish(Mockito.<String>any(), captor.capture());
         assertThat(captor.getValue().getValue()).isObject()
                 .hasObject("response")
                 .hasObject("detail")

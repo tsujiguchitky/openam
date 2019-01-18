@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.rest.fluent;
 
@@ -31,6 +32,7 @@ import org.forgerock.openam.audit.AuditEventFactory;
 import org.forgerock.openam.audit.AuditEventPublisher;
 import org.forgerock.services.context.Context;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -68,7 +70,7 @@ public class CrestAuditorTest {
 
     @Test(dataProvider = "CRESTRequests")
     public void auditAccessShouldPublishEvents(Request request) throws Exception {
-        given(auditEventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).willReturn(true);
+        given(auditEventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).willReturn(true);
         auditor = new CrestAuditor(debug, auditEventPublisher, auditEventFactory, context, request);
         givenAccessAuditingEnabled(auditEventPublisher);
 
@@ -81,7 +83,7 @@ public class CrestAuditorTest {
 
     @Test(dataProvider = "CRESTRequests")
     public void auditSuccessShouldPublishEvents(Request request) throws Exception {
-        given(auditEventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).willReturn(true);
+        given(auditEventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).willReturn(true);
         auditor = new CrestAuditor(debug, auditEventPublisher, auditEventFactory, context, request);
         givenAccessAuditingEnabled(auditEventPublisher);
 
@@ -96,7 +98,7 @@ public class CrestAuditorTest {
 
     @Test(dataProvider = "CRESTRequests")
     public void auditFailureShouldPublishEvents(Request request) throws Exception {
-        given(auditEventPublisher.isAuditing(anyString(), anyString(), any(EventName.class))).willReturn(true);
+        given(auditEventPublisher.isAuditing(Mockito.<String>any(), anyString(), any(EventName.class))).willReturn(true);
         auditor = new CrestAuditor(debug, auditEventPublisher, auditEventFactory, context, request);
         givenAccessAuditingEnabled(auditEventPublisher);
 
