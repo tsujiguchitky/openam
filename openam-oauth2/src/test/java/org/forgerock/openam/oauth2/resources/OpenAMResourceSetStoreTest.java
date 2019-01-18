@@ -12,14 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.oauth2.resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.openam.utils.CollectionUtils.asSet;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ import org.forgerock.openam.cts.api.tokens.TokenIdGenerator;
 import org.forgerock.openam.sm.datalayer.store.TokenDataStore;
 import org.forgerock.util.query.QueryFilter;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -61,8 +61,8 @@ public class OpenAMResourceSetStoreTest {
 
         store = new OpenAMResourceSetStore("REALM", providerSettingsFactory, oAuth2UrisFactory, idGenerator, dataStore);
 
-        given(oAuth2UrisFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(oAuth2Uris);
-        given(oAuth2Uris.getResourceSetRegistrationPolicyEndpoint(anyString())).willReturn("POLICY_URI");
+        given(oAuth2UrisFactory.get(Mockito.<OAuth2Request>anyObject())).willReturn(oAuth2Uris);
+        given(oAuth2Uris.getResourceSetRegistrationPolicyEndpoint(Mockito.<String>any())).willReturn("POLICY_URI");
     }
 
     @Test(enabled = false, expectedExceptions = BadRequestException.class)
@@ -75,7 +75,7 @@ public class OpenAMResourceSetStoreTest {
                         Collections.<String, Object>singletonMap("name", "RESOURCE_SET_NAME"));
 
         resourceSetDescription.setRealm("REALM");
-        given(dataStore.query(Matchers.<QueryFilter<String>>anyObject()))
+        given(dataStore.query(Mockito.<QueryFilter<String>>anyObject()))
                 .willReturn(Collections.singleton(resourceSetDescription));
 
         //When
@@ -98,7 +98,7 @@ public class OpenAMResourceSetStoreTest {
                 new ResourceSetDescription("RESOURCE_SET_ID", "CLIENT_ID", "RESOURCE_OWNER_ID",
                         Collections.<String, Object>singletonMap("name", "RESOURCE_SET_NAME"));
 
-        given(dataStore.query(Matchers.<QueryFilter<String>>anyObject()))
+        given(dataStore.query(Mockito.<QueryFilter<String>>anyObject()))
                 .willReturn(Collections.<ResourceSetDescription>emptySet());
 
         //When
@@ -214,7 +214,7 @@ public class OpenAMResourceSetStoreTest {
                 new ResourceSetDescription("456", "CLIENT_ID", "RESOURCE_OWNER_ID",
                         Collections.<String, Object>emptyMap());
 
-        given(dataStore.query(Matchers.<QueryFilter<String>>anyObject()))
+        given(dataStore.query(Mockito.<QueryFilter<String>>anyObject()))
                 .willReturn(asSet(resourceSet1, resourceSet2));
         resourceSet1.setRealm("REALM");
         resourceSet2.setRealm("REALM");

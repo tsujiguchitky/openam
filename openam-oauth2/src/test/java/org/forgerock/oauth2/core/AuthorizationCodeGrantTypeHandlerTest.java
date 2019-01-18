@@ -12,14 +12,14 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.oauth2.core;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.forgerock.openam.utils.Time.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.testng.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import java.util.Set;
 import org.forgerock.oauth2.core.exceptions.InvalidCodeException;
 import org.forgerock.oauth2.core.exceptions.InvalidGrantException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -66,7 +66,7 @@ public class AuthorizationCodeGrantTypeHandlerTest {
                 tokenInvalidator, providerSettingsFactory, urisFactory, accessTokenGenerator);
 
         providerSettings = mock(OAuth2ProviderSettings.class);
-        given(providerSettingsFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(providerSettings);
+        given(providerSettingsFactory.get(Mockito.<OAuth2Request>anyObject())).willReturn(providerSettings);
 
         uris = mock(OAuth2Uris.class);
         given(urisFactory.get(any(OAuth2Request.class))).willReturn(uris);
@@ -114,7 +114,8 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         } catch (InvalidGrantException e) {
             //Then
             verify(requestValidator).validateRequest(request, clientRegistration);
-            verify(tokenInvalidator).invalidateTokens(eq(request), anyString(), anyString(), anyString());
+            verify(tokenInvalidator).invalidateTokens(eq(request), Mockito.<String>any(), Mockito.<String>any(),
+                    Mockito.<String>any());
         }
     }
 
@@ -214,10 +215,12 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(authorizationCode.getExpiryTime()).willReturn(currentTimeMillis() + 100);
         given(providerSettings.issueRefreshTokens()).willReturn(true);
-        given(tokenStore.createRefreshToken(anyString(), anyString(), anyString(), anyString(), anySetOf(String.class),
-                eq(request), isNull(String.class))).willReturn(refreshToken);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
-                anySetOf(String.class), Matchers.<RefreshToken>anyObject(), anyString(), anyString(), eq(request)))
+        given(tokenStore.createRefreshToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), anySetOf(String.class), eq(request), isNull(String.class)))
+                .willReturn(refreshToken);
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class), 
+                Mockito.<RefreshToken>anyObject(), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
         given(providerSettings.validateAccessTokenScope(eq(clientRegistration), anySetOf(String.class), eq(request)))
                 .willReturn(validatedScope);
@@ -229,8 +232,8 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         verify(requestValidator).validateRequest(request, clientRegistration);
         verify(authorizationCode).setIssued();
         verify(tokenStore).updateAuthorizationCode(request, authorizationCode);
-        verify(accessToken).addExtraData(eq("refresh_token"), anyString());
-        verify(accessToken).addExtraData(eq("nonce"), anyString());
+        verify(accessToken).addExtraData(eq("refresh_token"), Mockito.<String>any());
+        verify(accessToken).addExtraData(eq("nonce"), Mockito.<String>any());
         verify(providerSettings).additionalDataToReturnFromTokenEndpoint(accessToken, request);
         verify(accessToken, never()).addExtraData(eq("scope"), anyString());
         assertEquals(actualAccessToken, accessToken);
@@ -257,8 +260,9 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(authorizationCode.getExpiryTime()).willReturn(currentTimeMillis() + 100);
         given(providerSettings.issueRefreshTokens()).willReturn(false);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
-                anySetOf(String.class), Matchers.<RefreshToken>anyObject(), anyString(), anyString(), eq(request)))
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class), 
+                Mockito.<RefreshToken>anyObject(), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
         given(providerSettings.validateAccessTokenScope(eq(clientRegistration), anySetOf(String.class), eq(request)))
                 .willReturn(validatedScope);
@@ -271,7 +275,7 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         verify(authorizationCode).setIssued();
         verify(tokenStore).updateAuthorizationCode(request, authorizationCode);
         verify(accessToken, never()).addExtraData(eq("refresh_token"), anyString());
-        verify(accessToken).addExtraData(eq("nonce"), anyString());
+        verify(accessToken).addExtraData(eq("nonce"), Mockito.<String>any());
         verify(providerSettings).additionalDataToReturnFromTokenEndpoint(accessToken, request);
         verify(accessToken, never()).addExtraData(eq("scope"), anyString());
         assertEquals(actualAccessToken, accessToken);
@@ -298,8 +302,9 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         given(clientRegistration.getClientId()).willReturn("CLIENT_ID");
         given(authorizationCode.getExpiryTime()).willReturn(currentTimeMillis() + 100);
         given(providerSettings.issueRefreshTokens()).willReturn(false);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
-                anySetOf(String.class), Matchers.<RefreshToken>anyObject(), anyString(), anyString(), eq(request)))
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class), 
+                Mockito.<RefreshToken>anyObject(), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
         given(authorizationCode.getScope()).willReturn(validatedScope);
 
@@ -311,7 +316,7 @@ public class AuthorizationCodeGrantTypeHandlerTest {
         verify(authorizationCode).setIssued();
         verify(tokenStore).updateAuthorizationCode(request, authorizationCode);
         verify(accessToken, never()).addExtraData(eq("refresh_token"), anyString());
-        verify(accessToken).addExtraData(eq("nonce"), anyString());
+        verify(accessToken).addExtraData(eq("nonce"), Mockito.<String>any());
         verify(providerSettings).additionalDataToReturnFromTokenEndpoint(accessToken, request);
         verify(accessToken).addExtraData(eq("scope"), anyString());
         assertEquals(actualAccessToken, accessToken);

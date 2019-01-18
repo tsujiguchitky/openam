@@ -12,20 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.oauth2.core;
 
 import static org.forgerock.openam.utils.Time.currentTimeMillis;
-import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.isNull;
-import static org.mockito.Mockito.anySetOf;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
 
 import java.util.Collections;
@@ -36,7 +29,7 @@ import java.util.Set;
 
 import org.forgerock.oauth2.core.exceptions.InvalidGrantException;
 import org.forgerock.oauth2.core.exceptions.InvalidRequestException;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -68,7 +61,7 @@ public class AccessTokenServiceTest {
                 providerSettingsFactory, urisFactory);
 
         providerSettings = mock(OAuth2ProviderSettings.class);
-        given(providerSettingsFactory.get(Matchers.<OAuth2Request>anyObject())).willReturn(providerSettings);
+        given(providerSettingsFactory.get(Mockito.<OAuth2Request>anyObject())).willReturn(providerSettings);
 
         uris = mock(OAuth2Uris.class);
         given(urisFactory.get(any(OAuth2Request.class))).willReturn(uris);
@@ -216,8 +209,9 @@ public class AccessTokenServiceTest {
         given(refreshToken.getExpiryTime()).willReturn(currentTimeMillis() + 100);
         given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySetOf(String.class),
                 anySetOf(String.class), eq(request))).willReturn(validatedScope);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(refreshToken), anyString(), anyString(), eq(request)))
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class),
+                eq(refreshToken), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
 
         //When
@@ -248,8 +242,9 @@ public class AccessTokenServiceTest {
         given(refreshToken.getExpiryTime()).willReturn(currentTimeMillis() + 100);
         given(providerSettings.validateRefreshTokenScope(eq(clientRegistration), anySetOf(String.class),
                 anySetOf(String.class), eq(request))).willReturn(validatedScope);
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(refreshToken), anyString(), anyString(), eq(request)))
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class),
+                eq(refreshToken), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
 
         //When
@@ -287,12 +282,14 @@ public class AccessTokenServiceTest {
                 anySetOf(String.class), eq(request))).willReturn(validatedScope);
 
         given(providerSettings.issueRefreshTokensOnRefreshingToken()).willReturn(true);
-        given(tokenStore.createRefreshToken(anyString(), anyString(), anyString(), anyString(), anySetOf(String.class),
-                eq(request), isNull(String.class), anyString())).willReturn(newRefreshToken);
+        given(tokenStore.createRefreshToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), anySetOf(String.class), eq(request), isNull(String.class), Mockito.<String>any()))
+                .willReturn(newRefreshToken);
         given(newRefreshToken.toString()).willReturn(newRefreshTokenId);
 
-        given(tokenStore.createAccessToken(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anySetOf(String.class), eq(newRefreshToken), anyString(), anyString(), eq(request)))
+        given(tokenStore.createAccessToken(Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(),
+                Mockito.<String>any(), Mockito.<String>any(), Mockito.<String>any(), anySetOf(String.class),
+                eq(newRefreshToken), Mockito.<String>any(), Mockito.<String>any(), eq(request)))
                 .willReturn(accessToken);
 
         //When
