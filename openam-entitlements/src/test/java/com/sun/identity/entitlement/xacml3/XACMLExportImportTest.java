@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package com.sun.identity.entitlement.xacml3;
@@ -21,15 +22,6 @@ import static com.sun.identity.entitlement.xacml3.XACMLExportImport.PrivilegeMan
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.openam.utils.Time.getCalendarInstance;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.mock;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.fail;
 
 import java.io.InputStream;
@@ -45,6 +37,7 @@ import org.forgerock.openam.entitlement.service.ResourceTypeService;
 import org.forgerock.openam.xacml.v3.DiffStatus;
 import org.forgerock.openam.xacml.v3.ImportStep;
 import org.forgerock.openam.xacml.v3.PersistableImportStep;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -92,7 +85,7 @@ public class XACMLExportImportTest {
         applicationServiceFactory = mock(ApplicationServiceFactory.class);
         applicationService = mock(ApplicationService.class);
         resourceTypeService = mock(ResourceTypeService.class);
-        when(applicationServiceFactory.create(any(Subject.class), anyString())).thenReturn(applicationService);
+        when(applicationServiceFactory.create(Mockito.<Subject>any(), Mockito.<String>any())).thenReturn(applicationService);
 
         Application application = mock(Application.class);
         URLResourceName urlResourceName = mock(URLResourceName.class);
@@ -108,7 +101,7 @@ public class XACMLExportImportTest {
 
         // Given (shared test state)
 
-        given(pmFactory.createReferralPrivilegeManager(eq(ROOT_REALM), any(Subject.class))).willReturn(pm);
+        given(pmFactory.createReferralPrivilegeManager(eq(ROOT_REALM), Mockito.<Subject>any())).willReturn(pm);
         given(applicationServiceFactory.create(any(Subject.class), anyString())).willReturn(applicationService);
         given(applicationService.getApplication(anyString())).willReturn(application);
         given(application.getResourceComparator()).willReturn(urlResourceName);

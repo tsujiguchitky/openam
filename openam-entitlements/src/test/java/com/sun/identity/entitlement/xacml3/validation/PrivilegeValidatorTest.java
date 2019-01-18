@@ -12,11 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package com.sun.identity.entitlement.xacml3.validation;
 
 import com.sun.identity.entitlement.EntitlementException;
 import com.sun.identity.entitlement.ReferralPrivilege;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,9 +27,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.testng.AssertJUnit.fail;
 
 public class PrivilegeValidatorTest {
@@ -44,7 +44,7 @@ public class PrivilegeValidatorTest {
     @Test
     public void shouldErrorIfRealmWasNotValid() throws EntitlementException {
         doThrow(new EntitlementException(EntitlementException.INVALID_SEARCH_FILTER))
-                .when(mockValidator).validateRealms(anyListOf(String.class));
+                .when(mockValidator).validateRealms(Mockito.<String>anyCollection());
         try {
             validator.validateReferralPrivilege(createReferral("Badger"));
             fail();
