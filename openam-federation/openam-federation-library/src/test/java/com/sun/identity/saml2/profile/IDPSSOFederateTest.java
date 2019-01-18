@@ -12,13 +12,12 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package com.sun.identity.saml2.profile;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.forgerock.openam.saml2.IDPRequestValidator;
 import org.forgerock.openam.saml2.IDPSSOFederateRequest;
@@ -66,7 +65,7 @@ public class IDPSSOFederateTest {
     @BeforeMethod
     public void initMocks() throws ServerFaultException, ClientFaultException {
         MockitoAnnotations.initMocks(this);
-        when(actorFactory.getIDPRequestValidator(Mockito.anyString(), anyBoolean())).thenReturn(validator);
+        when(actorFactory.getIDPRequestValidator(Mockito.<String>any(), anyBoolean())).thenReturn(validator);
         when(actorFactory.getSAMLAuthenticator(
                 any(IDPSSOFederateRequest.class),
                 any(HttpServletRequest.class),
