@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2014-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.upgrade.steps;
@@ -271,12 +272,12 @@ public class UpgradeEntitlementSubConfigsStepTest {
     }
 
     // Used to match the application as defined in the test xml.
-    private static final class ApplicationMatch extends ArgumentMatcher<Application> {
+    private static final class ApplicationMatch implements ArgumentMatcher<Application> {
 
         @Override
-        public boolean matches(Object argument) {
+        public boolean matches(Application argument) {
             boolean matches = true;
-            final Application application = (Application)argument;
+            final Application application = argument;
             matches &= "application4".equals(application.getName());
             matches &= "type1".equals(application.getApplicationType().getName());
             matches &= collectionMatch(
@@ -290,12 +291,12 @@ public class UpgradeEntitlementSubConfigsStepTest {
     }
 
     // Used to match an application type as defined in the test xml.
-    private static final class TypeMatch extends ArgumentMatcher<ApplicationType> {
+    private static final class TypeMatch implements ArgumentMatcher<ApplicationType> {
 
         @Override
-        public boolean matches(Object argument) {
+        public boolean matches(ApplicationType argument) {
             boolean matches = true;
-            final ApplicationType type = (ApplicationType)argument;
+            final ApplicationType type = argument;
             matches &= "type4".equals(type.getName());
             matches &= TYPE_ACTIONS.equals(type.getActions());
             matches &= type.getSearchIndex() instanceof DumbSearchIndex;
