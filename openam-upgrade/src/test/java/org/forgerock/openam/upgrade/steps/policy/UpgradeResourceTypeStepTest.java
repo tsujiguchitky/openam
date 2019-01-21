@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.upgrade.steps.policy;
 
@@ -26,6 +27,7 @@ import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 import org.forgerock.openam.entitlement.service.ResourceTypeService;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.forgerock.openam.upgrade.UpgradeException;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -100,7 +102,7 @@ public class UpgradeResourceTypeStepTest {
 
         // Mock organisation and application service configuration
         ServiceConfig orgConfig = mock(ServiceConfig.class);
-        when(configManager.getOrganizationConfig(anyString(), anyString())).thenReturn(orgConfig);
+        when(configManager.getOrganizationConfig(anyString(), Mockito.<String>any())).thenReturn(orgConfig);
         ServiceConfig appsConfig = mock(ServiceConfig.class);
         when(orgConfig.getSubConfig(anyString())).thenReturn(appsConfig);
 

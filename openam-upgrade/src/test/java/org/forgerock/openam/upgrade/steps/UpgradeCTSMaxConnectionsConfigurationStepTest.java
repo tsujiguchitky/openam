@@ -12,15 +12,13 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.upgrade.steps;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.security.PrivilegedAction;
@@ -33,6 +31,7 @@ import org.forgerock.openam.sm.datalayer.api.ConnectionType;
 import org.forgerock.openam.upgrade.steps.UpgradeCTSMaxConnectionsConfigurationStep.ConnectionCount;
 import org.forgerock.openam.upgrade.steps.UpgradeCTSMaxConnectionsConfigurationStep.ServerInstanceConfig;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.BeforeMethod;
@@ -62,8 +61,8 @@ public class UpgradeCTSMaxConnectionsConfigurationStepTest {
         upgradeStep = new UpgradeCTSMaxConnectionsConfigurationStep(adminTokenAction, connectionFactory,
                 connectionCount, helper);
 
-        given(helper.getDefaultServerConfig(any(SSOToken.class))).willReturn(defaultServerInstanceConfig);
-        given(helper.getServerConfigs(any(SSOToken.class))).willReturn(serverInstanceConfigs);
+        given(helper.getDefaultServerConfig(Mockito.<SSOToken>any())).willReturn(defaultServerInstanceConfig);
+        given(helper.getServerConfigs(Mockito.<SSOToken>any())).willReturn(serverInstanceConfigs);
         given(connectionCount.getConnectionCount(anyInt(), any(ConnectionType.class)))
                 .willAnswer(new Answer<Integer>() {
                     @Override

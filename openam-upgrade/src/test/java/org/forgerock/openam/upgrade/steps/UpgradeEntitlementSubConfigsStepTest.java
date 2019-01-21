@@ -38,6 +38,7 @@ import org.forgerock.openam.entitlement.service.ApplicationServiceFactory;
 import org.forgerock.openam.sm.datalayer.api.ConnectionFactory;
 import org.forgerock.openam.upgrade.UpgradeException;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -112,7 +113,7 @@ public class UpgradeEntitlementSubConfigsStepTest {
         resourceTypeConfiguration = mock(ResourceTypeConfiguration.class);
         applicationServiceFactory = mock(ApplicationServiceFactory.class);
         applicationService = mock(ApplicationService.class);
-        when(applicationServiceFactory.create(any(Subject.class), anyString())).thenReturn(applicationService);
+        when(applicationServiceFactory.create(Mockito.<Subject>any(), anyString())).thenReturn(applicationService);
         upgradeStep = new SafeUpgradeEntitlementSubConfigsStep(entitlementService, resourceTypeConfiguration,
                 adminTokenAction, connectionFactory, applicationServiceFactory);
 
