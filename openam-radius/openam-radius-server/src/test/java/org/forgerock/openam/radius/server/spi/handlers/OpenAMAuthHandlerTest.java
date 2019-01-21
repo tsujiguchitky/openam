@@ -12,11 +12,11 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyrighted 2015 Intellectual Reserve, Inc (IRI)
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 package org.forgerock.openam.radius.server.spi.handlers;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -41,6 +41,7 @@ import org.forgerock.openam.radius.server.spi.handlers.amhandler.ContextHolder;
 import org.forgerock.openam.radius.server.spi.handlers.amhandler.ContextHolder.AuthPhase;
 import org.forgerock.openam.radius.server.spi.handlers.amhandler.ContextHolderCache;
 import org.forgerock.openam.radius.server.spi.handlers.amhandler.OpenAMAuthFactory;
+import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
 import com.sun.identity.authentication.AuthContext;
@@ -96,7 +97,7 @@ public class OpenAMAuthHandlerTest {
 
         final ContextHolderCache ctxHolderCache = mock(ContextHolderCache.class);
         when(ctxHolderCache.createCachedContextHolder()).thenReturn(holder);
-        when(ctxHolderCache.get(isA(String.class))).thenReturn(holder);
+        when(ctxHolderCache.get(Mockito.<String>isA(String.class))).thenReturn(holder);
 
         EventBus eventBus = new EventBus();
 
@@ -130,7 +131,8 @@ public class OpenAMAuthHandlerTest {
         UserNameAttribute userName = mock(UserNameAttribute.class);
         when(userName.getName()).thenReturn("Fred");
         UserPasswordAttribute userPassword = mock(UserPasswordAttribute.class);
-        when(userPassword.extractPassword(isA(Authenticator.class), isA(String.class))).thenReturn("password");
+        when(userPassword.extractPassword(Mockito.<Authenticator>isA(Authenticator.class), 
+                Mockito.<String>isA(String.class))).thenReturn("password");
         when(request.getAttribute(UserPasswordAttribute.class)).thenReturn(userPassword);
         when(request.getAttribute(UserNameAttribute.class)).thenReturn(userName);
 
