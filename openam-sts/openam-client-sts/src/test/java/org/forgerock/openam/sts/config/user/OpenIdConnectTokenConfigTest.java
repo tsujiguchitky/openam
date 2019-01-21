@@ -12,11 +12,11 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.sts.config.user;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 import org.forgerock.guava.common.collect.Lists;
 import org.forgerock.json.jose.jws.JwsAlgorithm;
