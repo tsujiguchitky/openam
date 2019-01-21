@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.uma.rest;
@@ -20,8 +21,7 @@ import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.forgerock.json.resource.Responses.newQueryResponse;
 import static org.forgerock.util.query.QueryFilter.equalTo;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 import javax.security.auth.Subject;
 import java.util.Collection;
@@ -60,7 +60,7 @@ import org.forgerock.util.Pair;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.forgerock.util.query.QueryFilterVisitor;
-import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -109,7 +109,7 @@ public class ResourceSetServiceTest {
         //Then
         assertThat(resourceSet).isEqualTo(resourceSetDescription);
         verifyZeroInteractions(policyService);
-        verify(resourceSet, never()).setPolicy(Matchers.<JsonValue>anyObject());
+        verify(resourceSet, never()).setPolicy(Mockito.<JsonValue>anyObject());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class ResourceSetServiceTest {
         query.setResourceSetQuery(resourceSetQuery);
         query.setPolicyQuery(policyQuery);
         given(resourceSetStore.query(any(QueryFilter.class))).willReturn(queriedResourceSets);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
 
         mockResourceOwnerIdentity(resourceOwnerId, realm);
@@ -222,7 +222,7 @@ public class ResourceSetServiceTest {
         Pair<QueryResponse, Collection<UmaPolicy>> queriedPoliciesPair = Pair.of(newQueryResponse(), queriedPolicies);
         Promise<Pair<QueryResponse, Collection<UmaPolicy>>, ResourceException> queriedPoliciesPromise
                 = Promises.newResultPromise(queriedPoliciesPair);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         //When
         Collection<ResourceSetDescription> resourceSets = service.getResourceSets(context, realm, query, resourceOwnerId,
@@ -271,7 +271,7 @@ public class ResourceSetServiceTest {
         given(policyService.readPolicy(context, "RS_ID_ONE")).willReturn(policyOnePromise);
         given(policyService.readPolicy(context, "RS_ID_TWO")).willReturn(policyTwoPromise);
 
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(Promises.<Pair<QueryResponse, Collection<UmaPolicy>>, ResourceException>newResultPromise(
                         Pair.<QueryResponse, Collection<UmaPolicy>>of(newQueryResponse(), new HashSet<UmaPolicy>())));
         mockResourceOwnerIdentity(resourceOwnerId, realm);
@@ -290,8 +290,9 @@ public class ResourceSetServiceTest {
     private void mockPolicyEvaluator(String clientId) throws EntitlementException {
         Evaluator policyEvaluator = mock(Evaluator.class);
         given(umaProviderSettings.getPolicyEvaluator(any(Subject.class), anyString())).willReturn(policyEvaluator);
-        given(policyEvaluator.evaluate(any(String.class), any(Subject.class), any(String.class), anyMap(),
-                any(Boolean.class))).willReturn(Collections.<Entitlement>emptyList());
+        given(policyEvaluator.evaluate(any(String.class), any(Subject.class), any(String.class), 
+                Mockito.<String, Set<String>>anyMap(), any(Boolean.class)))
+                .willReturn(Collections.<Entitlement>emptyList());
         given(umaProviderSettings.getPolicyEvaluator(any(Subject.class), eq(clientId.toLowerCase())))
                 .willReturn(policyEvaluator);
     }
@@ -343,7 +344,7 @@ public class ResourceSetServiceTest {
         given(policyTwo.getId()).willReturn("RS_ID_THREE");
         given(policyTwo.getResourceSet()).willReturn(resourceSetTwo);
         given(resourceSetStore.query(resourceSetQuery)).willReturn(queriedResourceSets);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         given(resourceSetStore.read("RS_ID_THREE", resourceOwnerId)).willReturn(resourceSetThree);
 
@@ -404,7 +405,7 @@ public class ResourceSetServiceTest {
 
         mockPolicyEvaluator("RS_CLIENT_ID");
 
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         given(resourceSetStore.read("RS_ID_THREE", resourceOwnerId)).willReturn(resourceSetThree);
 
@@ -472,7 +473,7 @@ public class ResourceSetServiceTest {
                 resourceSetQuery,
                 equalTo(ResourceSetTokenField.RESOURCE_OWNER_ID, "RESOURCE_OWNER_ID"))))
                 .willReturn(queriedResourceSets);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         given(resourceSetStore.read("RS_ID_ONE", resourceOwnerId)).willReturn(resourceSetOne);
         given(resourceSetStore.read("RS_ID_THREE", resourceOwnerId)).willReturn(resourceSetThree);
@@ -549,7 +550,7 @@ public class ResourceSetServiceTest {
         given(policyThree.asJson()).willReturn(policyThreeJson);
         given(policyThree.getResourceSet()).willReturn(resourceSetThree);
         given(resourceSetStore.query(resourceSetQuery)).willReturn(queriedResourceSets);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         given(resourceSetStore.read("RS_ID_THREE", resourceOwnerId)).willReturn(resourceSetThree);
 
@@ -593,9 +594,9 @@ public class ResourceSetServiceTest {
 
         queriedResourceSets.add(resourceSetOne);
         queriedResourceSets.add(resourceSetTwo);
-        given(resourceSetStore.query(Matchers.<QueryFilter<String>>anyObject()))
+        given(resourceSetStore.query(Mockito.<QueryFilter<String>>anyObject()))
                 .willReturn(queriedResourceSets);
-        given(policyService.queryPolicies(eq(context), Matchers.<QueryRequest>anyObject()))
+        given(policyService.queryPolicies(eq(context), Mockito.<QueryRequest>anyObject()))
                 .willReturn(queriedPoliciesPromise);
         given(policyService.deletePolicy(context, "RS_ID_ONE"))
                 .willReturn(Promises.<Void, ResourceException>newResultPromise(null));

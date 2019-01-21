@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.uma;
@@ -21,11 +22,6 @@ import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.json.test.assertj.AssertJJsonValueAssert.assertThat;
 import static org.forgerock.openam.utils.Time.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.eq;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +64,6 @@ import org.forgerock.util.query.QueryFilter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -152,7 +147,7 @@ public class AuthorizationRequestEndpointTest {
         accessToken = mock(AccessToken.class);
 
         oauth2TokenStore = mock(TokenStore.class);
-        given(oauth2TokenStore.readAccessToken(Matchers.<OAuth2Request>anyObject(), anyString())).willReturn(accessToken);
+        given(oauth2TokenStore.readAccessToken(Mockito.<OAuth2Request>anyObject(), anyString())).willReturn(accessToken);
         given(accessToken.getClientId()).willReturn(RS_CLIENT_ID);
         given(accessToken.getResourceOwnerId()).willReturn(REQUESTING_PARTY_ID);
 
@@ -167,7 +162,7 @@ public class AuthorizationRequestEndpointTest {
         given(permissionTicket.getResourceServerClientId()).willReturn(RS_CLIENT_ID);
         given(permissionTicket.getRealm()).willReturn("REALM");
         given(umaTokenStore.readPermissionTicket(anyString())).willReturn(permissionTicket);
-        given(umaTokenStore.createRPT(Matchers.<PermissionTicket>anyObject())).willReturn(rpt);
+        given(umaTokenStore.createRPT(Mockito.<PermissionTicket>anyObject())).willReturn(rpt);
 
         resourceSetStore = mock(ResourceSetStore.class);
         ResourceSetDescription resourceSet = new ResourceSetDescription();
@@ -182,7 +177,7 @@ public class AuthorizationRequestEndpointTest {
         given(umaProviderSettings.getUmaTokenStore()).willReturn(umaTokenStore);
 
         umaProviderSettingsFactory = mock(UmaProviderSettingsFactory.class);
-        given(umaProviderSettingsFactory.get(Matchers.<Request>anyObject())).willReturn(umaProviderSettings);
+        given(umaProviderSettingsFactory.get(Mockito.<Request>anyObject())).willReturn(umaProviderSettings);
         given(umaProviderSettings.getUmaTokenStore()).willReturn(umaTokenStore);
 
         OAuth2ProviderSettingsFactory oauth2ProviderSettingsFactory = mock(OAuth2ProviderSettingsFactory.class);
@@ -231,7 +226,7 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
@@ -246,7 +241,8 @@ public class AuthorizationRequestEndpointTest {
             InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
             inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                     any(Subject.class));
-            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), 
+                    Mockito.<String, Set<String>>anyMap(), eq(false));
             inOrder.verify(requestAuthorizationFilter).afterFailedAuthorization(eq(permissionTicket),
                     any(Subject.class), any(Subject.class));
             assertThat(e.getStatusCode()).isEqualTo(403);
@@ -261,7 +257,7 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
@@ -275,7 +271,8 @@ public class AuthorizationRequestEndpointTest {
             InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
             inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                     any(Subject.class));
-            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+            inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), 
+                    Mockito.<String, Set<String>>anyMap(), eq(false));
             inOrder.verify(requestAuthorizationFilter).afterFailedAuthorization(eq(permissionTicket),
                     any(Subject.class), any(Subject.class));
             assertThat(e.getStatusCode()).isEqualTo(403);
@@ -290,7 +287,7 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<Entitlement>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
@@ -302,7 +299,8 @@ public class AuthorizationRequestEndpointTest {
         InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
         inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                 any(Subject.class));
-        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), 
+                Mockito.<String, Set<String>>anyMap(), eq(false));
         inOrder.verify(requestAuthorizationFilter).afterSuccessfulAuthorization(eq(permissionTicket),
                 any(Subject.class), any(Subject.class));
     }
@@ -314,7 +312,7 @@ public class AuthorizationRequestEndpointTest {
         entitlements.add(createEntitlement("Read"));
         entitlements.add(createEntitlement("Create"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<String>();
@@ -326,7 +324,8 @@ public class AuthorizationRequestEndpointTest {
         InOrder inOrder = inOrder(requestAuthorizationFilter, policyEvaluator, requestAuthorizationFilter);
         inOrder.verify(requestAuthorizationFilter).beforeAuthorization(eq(permissionTicket), any(Subject.class),
                 any(Subject.class));
-        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), anyMap(), eq(false));
+        inOrder.verify(policyEvaluator).evaluate(anyString(), any(Subject.class), anyString(), 
+                Mockito.<String, Set<String>>anyMap(), eq(false));
         inOrder.verify(requestAuthorizationFilter).afterSuccessfulAuthorization(eq(permissionTicket),
                 any(Subject.class), any(Subject.class));
     }
@@ -337,8 +336,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME),
+                Mockito.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -365,8 +364,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME),
+                Mockito.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -393,8 +392,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME),
+                Mockito.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -421,8 +420,8 @@ public class AuthorizationRequestEndpointTest {
         ArrayList<Entitlement> entitlements = new ArrayList<>();
         entitlements.add(createEntitlement("Read"));
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME),
-                Matchers.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME),
+                Mockito.<Map<String, Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
         requestedScopes.add("Read");
@@ -441,7 +440,7 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
@@ -473,7 +472,7 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();
@@ -505,7 +504,7 @@ public class AuthorizationRequestEndpointTest {
         //Given
         ArrayList<Entitlement> entitlements = new ArrayList<>();
 
-        given(policyEvaluator.evaluate(anyString(), Matchers.<Subject>anyObject(), eq(RESOURCE_NAME), Matchers.<Map<String,
+        given(policyEvaluator.evaluate(anyString(), Mockito.<Subject>anyObject(), eq(RESOURCE_NAME), Mockito.<Map<String,
                 Set<String>>>anyObject(), anyBoolean())).willReturn(entitlements);
 
         Set<String> requestedScopes = new HashSet<>();

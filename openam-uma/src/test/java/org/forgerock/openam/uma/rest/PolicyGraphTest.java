@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015-2016 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.uma.rest;
@@ -22,12 +23,6 @@ import static org.forgerock.json.JsonValue.*;
 import static org.forgerock.openam.uma.UmaConstants.BackendPolicy.*;
 import static org.forgerock.openam.uma.UmaConstants.UmaPolicy.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Matchers.isNull;
-import static org.mockito.Mockito.anySet;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.MockitoAnnotations.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +47,8 @@ import org.forgerock.util.promise.Promises;
 import org.forgerock.util.test.assertj.AssertJPromiseAssert;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -107,7 +104,7 @@ public class PolicyGraphTest {
 
     @BeforeMethod
     public void setup() throws Exception {
-        initMocks(this);
+        MockitoAnnotations.initMocks(this);
         given(resourceSetStoreFactory.create(anyString())).willReturn(resourceSetStore);
     }
 
@@ -167,10 +164,10 @@ public class PolicyGraphTest {
         PolicyGraph graph = makePolicyGraph(policies);
         graph.computeGraph();
 
-        given(delegate.updatePolicies(isNull(Context.class), anySet()))
+        given(delegate.updatePolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
-        given(delegate.deletePolicies(isNull(Context.class), anySet()))
+        given(delegate.deletePolicies(isNull(Context.class), Mockito.<String>anyCollection()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
         // When
@@ -197,7 +194,7 @@ public class PolicyGraphTest {
         PolicyGraph graph = makePolicyGraph(policies);
         graph.computeGraph();
 
-        given(delegate.updatePolicies(isNull(Context.class), anySet()))
+        given(delegate.updatePolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
         // When
@@ -226,10 +223,10 @@ public class PolicyGraphTest {
         given(resourceSetStore.read(anyString(), anyString()))
                 .willReturn(new ResourceSetDescription(RESOURCE_SET_ID, "RESOURCE_SERVER_ID", ALICE, null));
 
-        given(delegate.updatePolicies(isNull(Context.class), anySet()))
+        given(delegate.updatePolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
-        given(delegate.createPolicies(isNull(Context.class), anySet()))
+        given(delegate.createPolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
         // When
@@ -260,10 +257,10 @@ public class PolicyGraphTest {
         given(resourceSetStore.read(anyString(), anyString()))
                 .willReturn(new ResourceSetDescription(RESOURCE_SET_ID, "RESOURCE_SERVER_ID", ALICE, null));
 
-        given(delegate.updatePolicies(isNull(Context.class), anySet()))
+        given(delegate.updatePolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
-        given(delegate.createPolicies(isNull(Context.class), anySet()))
+        given(delegate.createPolicies(isNull(Context.class), Mockito.<JsonValue>anySet()))
                 .willReturn(Promises.<List<ResourceResponse>, ResourceException>newResultPromise(Collections.<ResourceResponse>emptyList()));
 
         // When
