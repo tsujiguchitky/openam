@@ -12,6 +12,7 @@
  * information: "Portions copyright [year] [name of copyright owner]".
  *
  * Copyright 2015 ForgeRock AS.
+ * Portions Copyrighted 2019 Open Source Solution Technology Corporation
  */
 
 package org.forgerock.openam.uma.rest;
@@ -21,9 +22,7 @@ import static org.forgerock.json.JsonValue.object;
 import static org.forgerock.json.resource.Responses.*;
 import static org.forgerock.util.promise.Promises.newResultPromise;
 import static org.forgerock.util.test.assertj.AssertJPromiseAssert.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ActionResponse;
@@ -66,8 +65,7 @@ public class UmaEnabledFilterTest {
     @BeforeClass
     public static void setupFactories() throws Exception {
         notYetConfiguredFactory = mock(UmaProviderSettingsFactory.class);
-        given(notYetConfiguredFactory.get(anyString()))
-                .willThrow(NotFoundException.class);
+        willThrow(NotFoundException.class).given(notYetConfiguredFactory).get(anyString());
         UmaProviderSettings notEnabled = mock(UmaProviderSettings.class);
         given(notEnabled.isEnabled()).willReturn(false);
         notEnabledFactory = mock(UmaProviderSettingsFactory.class);
