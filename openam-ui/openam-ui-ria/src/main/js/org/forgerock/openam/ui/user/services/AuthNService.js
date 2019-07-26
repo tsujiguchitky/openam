@@ -157,6 +157,11 @@ define([
                 // we timed out, so let's try again with a fresh session
                 oldReqs = requirementList[0];
                 obj.resetProcess();
+
+                if (AuthenticationToken.get()) {
+                    AuthenticationToken.remove();
+                }
+
                 return obj.begin().then((requirements) => {
                     obj.handleRequirements(requirements);
                     if (requirements.hasOwnProperty("authId")) {
