@@ -158,8 +158,10 @@ define([
                 oldReqs = requirementList[0];
                 obj.resetProcess();
 
+                // Suppress retry when using RedirectCallback
                 if (AuthenticationToken.get()) {
-                    AuthenticationToken.remove();
+                    EventManager.sendEvent(Constants.EVENT_DISPLAY_MESSAGE_REQUEST, "loginTimeout");
+                    return $.Deferred().reject(currentStage, reasonThatWillNotBeDisplayed).promise();
                 }
 
                 return obj.begin().then((requirements) => {
